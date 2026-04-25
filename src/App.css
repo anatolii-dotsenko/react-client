@@ -1,0 +1,44 @@
+.header {
+  background: #e74c3c;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+.main {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+.toggle-btn {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px 24px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.toggle-btn:hover {
+  background: #c0392b;
+}
+.list-container {
+  background: #fef9e7;
+  padding: 20px;
+  border-radius: 8px;
+}
+.list-container li {
+  padding: 6px 0;
+  font-size: 16px;
+}
+.image-container {
+  background: #eaf4fb;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+.image-container img {
+  max-width: 100%;
+  border-radius: 8px;
+}
