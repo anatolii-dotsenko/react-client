@@ -1,12 +1,18 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+
 import { ListPage } from "./pages/ListPage";
 import { ImagesPage } from "./pages/ImagesPage";
-import { LoginPage } from "./pages/LoginPage";
-import { SignUpPage } from "./pages/SignUpPage";
+import { AuthPage } from "./pages/AuthPage";
+import { AccountPage } from "./pages/AccountPage";
 import "./App.css";
 
-function App() {
+function AppContent() {
+  const { isAuth, logout } = useAuth();
+  
+  // Логіка теми з попереднього завдання
   const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
 
   useEffect(() => {
@@ -16,30 +22,55 @@ function App() {
   }, [dark]);
 
   return (
-    <BrowserRouter>
-      <div>
-        <nav className="navbar">
-          <Link to="/list">📋 Список</Link>
-          <Link to="/images">🖼️ Зображення</Link>
-          <Link to="/login">🔑 Вхід</Link>
-          <Link to="/signup">📝 Реєстрація</Link>
+    <div>
+      <nav className="navbar">
+        <Link to="/">📋 Список</Link>
+        
+        {/* Показуємо посилання на зображення лише для авторизованих */}
+        {isAuth && <Link to="/images">🖼️ Зображення (Protected)</Link>}
+        
+        <Link to="/auth">{isAuth ? "🧑‍💻 Кабінет" : "🔑 Вхід"}</Link>
+        
+        <div style={{ marginLeft: "auto", display: "flex", gap: "10px" }}>
+          {isAuth && (
+            <button onClick={logout} className="theme-toggle" style={{ background: "#e74c3c", color: "white", border: "none", borderRadius: "4px" }}>
+              Вийти
+            </button>
+          )}
           <button onClick={() => setDark(d => !d)} className="theme-toggle">
             {dark ? "☀️ Світла" : "🌙 Темна"}
           </button>
-        </nav>
-        
-        <main className="main" style={{ padding: "0 20px" }}>
-          <Routes>
-            <Route path="/list" element={<ListPage />} />
-            <Route path="/images" element={<ImagesPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="*" element={<ListPage />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+        </div>
+      </nav>
+
+      <main className="main" style={{ padding: "0 20px" }}>
+        <Routes>
+          <Route path="/" element={<ListPage />} />
+          
+          <Route path="/auth" element={isAuth ? <Navigate to="/account" /> : <AuthPage />} />
+          
+          <Route path="/account" element={
+            <ProtectedRoute><AccountPage /></ProtectedRoute>
+          } />
+          
+          {/* Зробили сторінку зображень захищеною */}
+          <Route path="/images" element={
+            <ProtectedRoute><ImagesPage /></ProtectedRoute>
+          } />
+          
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
