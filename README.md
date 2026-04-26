@@ -1,4 +1,4 @@
-# lab29. Тестування з fixture-патерном
+# lab30. Компоненти, роутер, теми. React Router + теми
 
 ## Technologies Used
 * **Фреймворк:** React + Vite

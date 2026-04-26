@@ -1,89 +1,69 @@
-.header {
-  background: #e74c3c;
-  color: white;
-  padding: 20px;
-  text-align: center;
+/* --- Змінні для тем --- */
+[data-theme="light"] { 
+  --bg: #ffffff; 
+  --text: #333333; 
+  --card: #f8f9fa; 
+  --border: #ccc;
 }
-.main {
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 0 16px;
+[data-theme="dark"] { 
+  --bg: #1a1a2e; 
+  --text: #e0e0e0; 
+  --card: #16213e; 
+  --border: #2a3b5c;
 }
-.stack {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+
+/* Глобальне застосування теми */
+body { 
+  background-color: var(--bg) !important; 
+  color: var(--text) !important; 
+  transition: all 0.3s ease; 
 }
+
+/* Адаптація карток під тему */
 .panel {
-  flex: 1;
-  min-width: 250px;
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background-color: var(--card) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
 }
-.controls {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+.panel h2, .panel p, .slider-value, .panel label, .gridfs-gallery p, .clickable-list li {
+  color: var(--text) !important;
 }
-.controls button {
-  padding: 6px 14px;
-  border: none;
-  border-radius: 4px;
-  background: #e74c3c;
-  color: white;
+
+/* Навігація */
+.navbar { 
+  background: var(--card); 
+  padding: 15px 20px; 
+  display: flex; 
+  gap: 20px; 
+  align-items: center; 
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+}
+.navbar a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.navbar a:hover {
+  text-decoration: underline;
+}
+.theme-toggle {
+  margin-left: auto; /* Відштовхує кнопку в правий край */
+  padding: 8px 12px;
   cursor: pointer;
-  font-size: 14px;
 }
-.controls button:hover {
-  background: #c0392b;
-}
-.panel ul {
-  padding-left: 20px;
-}
-.panel li {
-  padding: 6px 0;
-  font-size: 16px;
-}
-.panel img {
-  max-width: 100%;
-  border-radius: 6px;
-}
-.clickable-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.clickable-list li {
-  padding: 10px 15px;
-  margin-bottom: 5px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer; /* Змінює курсор на "руку" */
-  transition: all 0.2s ease;
-  font-size: 16px;
-}
-
-.clickable-list li:hover {
-  background-color: #eaf4fb; /* Легкий блакитний фон при наведенні */
-  border-color: #3498db;
-  color: #2980b9;
-  transform: translateX(5px); /* Легке зміщення вправо для динаміки */
-}
-/* --- Фікс кольорів тексту --- */
+/* --- Фікс кольорів тексту ---
 .panel h2, 
 .panel p, 
 .slider-value, 
 .panel label,
 .gridfs-gallery p {
-  color: #1a1a1a; /* Темно-сірий колір, який добре видно на світлому фоні */
+  color: #1a1a1a;
 }
 
 .panel {
-  background-color: #ffffff; /* Робимо фон панелей точно білим */
+  background-color: #ffffff;
   border: 1px solid #e0e0e0;
   color: #1a1a1a;
-}
+} */
