@@ -1,4 +1,4 @@
-# lab30. Компоненти, роутер, теми. React Router + теми
+# lab31. Декоратори для MVC-контролерів
 
 ## Technologies Used
 * **Фреймворк:** React + Vite
