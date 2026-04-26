@@ -1,0 +1,23 @@
+@use "variables" as *;
+
+@mixin flex-center { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+@mixin card { 
+  background: var(--card); 
+  border-radius: $border-radius; 
+  padding: $spacing * 1.5; 
+}
+
+// Генерація класів відступів (наприклад, .m-3, .pt-2)
+@mixin spacing-classes($sizes: (1: 4px, 2: 8px, 3: 16px, 4: 24px, 5: 32px)) {
+  @each $key, $value in $sizes {
+    .m-#{$key} { margin: $value; }
+    .p-#{$key} { padding: $value; }
+    .mt-#{$key} { margin-top: $value; }
+    .mb-#{$key} { margin-bottom: $value; }
+  }
+}

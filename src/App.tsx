@@ -7,7 +7,6 @@ import { ListPage } from "./pages/ListPage";
 import { ImagesPage } from "./pages/ImagesPage";
 import { AuthPage } from "./pages/AuthPage";
 import { AccountPage } from "./pages/AccountPage";
-import "./App.css";
 
 function AppContent() {
   const { isAuth, logout } = useAuth();

@@ -1,0 +1,99 @@
+@use "variables" as *;
+@use "reset";
+@use "typography";
+@use "mixins" as *;
+
+// Генерація утилітарних класів через цикл
+@include spacing-classes();
+
+// Теми через data-theme
+[data-theme="light"] {
+  --bg: #{$bg-light}; 
+  --text: #{$text-light}; 
+  --card: #{$card-light};
+  --border: #ccc;
+}
+[data-theme="dark"] {
+  --bg: #{$bg-dark}; 
+  --text: #{$text-dark}; 
+  --card: #{$card-dark};
+  --border: #2a3b5c;
+}
+
+body {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+// Кнопки з генерацією розмірів
+$btn-sizes: (sm: 8px 16px, md: 10px 24px, lg: 14px 32px);
+@each $size, $padding in $btn-sizes {
+  .btn-#{$size} {
+    padding: $padding;
+    background: $primary;
+    color: white;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover { background: $primary-dark; }
+  }
+}
+
+// --- Стилі компонентів (перенесені зі старих CSS і адаптовані під SCSS) ---
+
+.navbar {
+  background: var(--card);
+  padding: 15px 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+
+  a { // Вкладеність SCSS
+    text-decoration: none;
+    color: var(--text);
+    font-weight: bold;
+    font-size: 1.1rem;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+.panel {
+  @include card; // Використання міксину
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  margin-bottom: $spacing;
+  
+  h2, p, label { color: var(--text) !important; }
+}
+
+.form-container {
+  @include card;
+  max-width: 400px;
+  margin: 40px auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
+
+  h2 { text-align: center; margin-bottom: 20px; margin-top: 0; }
+}
+
+.form { display: flex; flex-direction: column; gap: $spacing; }
+.form-group { display: flex; flex-direction: column; gap: 6px; label { font-size: 14px; font-weight: 500; } }
+
+.form-input {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.2s;
+  &:focus { outline: none; border-color: $primary; }
+}
+
+// Використовуємо директиву @extend для наслідування стилів кнопок
+.form-btn { @extend .btn-md; font-weight: bold; width: 100%; }
+.theme-toggle { @extend .btn-sm; margin-left: auto; }
