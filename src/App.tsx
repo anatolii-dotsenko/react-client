@@ -2,16 +2,16 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ListPage } from "./pages/ListPage";
 import { ImagesPage } from "./pages/ImagesPage";
+import { LoginPage } from "./pages/LoginPage";
+import { SignUpPage } from "./pages/SignUpPage";
 import "./App.css";
 
 function App() {
-  // Читаємо попередню тему з localStorage (щоб вона зберігалась при оновленні сторінки)
   const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
 
   useEffect(() => {
     const theme = dark ? "dark" : "light";
     localStorage.setItem("theme", theme);
-    // Встановлюємо атрибут на body, щоб фон сторінки теж мінявся
     document.body.setAttribute("data-theme", theme);
   }, [dark]);
 
@@ -19,8 +19,10 @@ function App() {
     <BrowserRouter>
       <div>
         <nav className="navbar">
-          <Link to="/list">📋 Список (Статика + Slider)</Link>
-          <Link to="/images">🖼️ Зображення (MongoDB)</Link>
+          <Link to="/list">📋 Список</Link>
+          <Link to="/images">🖼️ Зображення</Link>
+          <Link to="/login">🔑 Вхід</Link>
+          <Link to="/signup">📝 Реєстрація</Link>
           <button onClick={() => setDark(d => !d)} className="theme-toggle">
             {dark ? "☀️ Світла" : "🌙 Темна"}
           </button>
@@ -30,7 +32,8 @@ function App() {
           <Routes>
             <Route path="/list" element={<ListPage />} />
             <Route path="/images" element={<ImagesPage />} />
-            {/* Перенаправлення за замовчуванням */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
             <Route path="*" element={<ListPage />} />
           </Routes>
         </main>

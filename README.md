@@ -1,4 +1,4 @@
-# lab31. Декоратори для MVC-контролерів
+# lab32. Компонентно-орієнтовані форми
 
 ## Technologies Used
 * **Фреймворк:** React + Vite
@@ -20,4 +20,4 @@ npm run dev
 http://localhost:5173
 ```
 ### Screenshots
-<img width="1920" height="1054" alt="image" src="https://github.com/user-attachments/assets/81d1078e-4e2e-4dca-bd6f-2e0793b468b7" />
+
