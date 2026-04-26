@@ -20,4 +20,4 @@ npm run dev
 http://localhost:5173
 ```
 ### Screenshots
-
+<img width="1920" height="1055" alt="image" src="https://github.com/user-attachments/assets/b9117050-b2c6-44a2-99d9-8b42f172bb7b" />
