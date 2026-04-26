@@ -73,3 +73,17 @@
   color: #2980b9;
   transform: translateX(5px); /* Легке зміщення вправо для динаміки */
 }
+/* --- Фікс кольорів тексту --- */
+.panel h2, 
+.panel p, 
+.slider-value, 
+.panel label,
+.gridfs-gallery p {
+  color: #1a1a1a; /* Темно-сірий колір, який добре видно на світлому фоні */
+}
+
+.panel {
+  background-color: #ffffff; /* Робимо фон панелей точно білим */
+  border: 1px solid #e0e0e0;
+  color: #1a1a1a;
+}
