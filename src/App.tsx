@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import { SliderComponent } from "./components/SliderComponent";
 
 const API = "http://localhost:3000";
 
@@ -88,6 +89,7 @@ function App() {
               <p>Зображення не знайдено</p>
             )}
           </div>
+          <SliderComponent />
         </div>
       </main>
     </div>
