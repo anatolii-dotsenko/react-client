@@ -2,30 +2,34 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { SliderComponent } from "./components/SliderComponent";
 
-const API = "http://localhost:3000";
+// Імпортуємо контейнер та символи інтерфейсів
+import { container } from "./container";
+import { IApiService } from "./services/IApiService";
+import { IListRenderer } from "./services/IListRenderer";
 
 function App() {
   const [items, setItems] = useState<string[]>([]);
-  const [imageFiles, setImageFiles] = useState<string[]>([]); // Зберігаємо масив файлів з розширеннями
+  const [imageFiles, setImageFiles] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState("");
   const [listType, setListType] = useState("fruits");
 
+  // Дістаємо залежності (сервіси) з контейнера inversify
+  const apiService = container.get<IApiService>(IApiService);
+  const listRenderer = container.get<IListRenderer>(IListRenderer);
+
   const loadData = async (type: string) => {
     try {
-      // 1. Отримуємо текстові назви списку
-      const resList = await fetch(`${API}/api/list/${type}`);
-      const dataList = await resList.json();
-      setItems(dataList.items || []);
+      // 1. Отримуємо текстові назви списку через сервіс
+      const fetchedItems = await apiService.getList(type);
+      setItems(fetchedItems);
 
-      // 2. Отримуємо імена файлів зображень
-      const resImg = await fetch(`${API}/api/list/${type}/images`);
-      const dataImg = await resImg.json();
-      const files = dataImg.images || [];
-      setImageFiles(files); // Зберігаємо файли в стейт
+      // 2. Отримуємо імена файлів зображень через сервіс
+      const fetchedFiles = await apiService.getImageFiles(type);
+      setImageFiles(fetchedFiles);
 
-      // 3. За замовчуванням показуємо першу картинку
-      if (files.length > 0) {
-        setImageUrl(`${API}/images/${type}/${files[0]}`);
+      // 3. Формуємо URL першої картинки через сервіс
+      if (fetchedFiles.length > 0) {
+        setImageUrl(apiService.getImageUrl(type, fetchedFiles[0]));
       } else {
         setImageUrl("");
       }
@@ -40,13 +44,12 @@ function App() {
     loadData("fruits");
   }, []);
 
-  // Функція обробки кліку по елементу списку
   const handleItemClick = (itemName: string) => {
-    // Шукаємо файл, який починається з назви елемента (наприклад, "Манго" знайде "Манго.webp")
     const matchingFile = imageFiles.find((file) => file.startsWith(itemName));
 
     if (matchingFile) {
-      setImageUrl(`${API}/images/${listType}/${matchingFile}`);
+      // Формуємо URL картинки через сервіс
+      setImageUrl(apiService.getImageUrl(listType, matchingFile));
     } else {
       console.warn(`Картинку для ${itemName} не знайдено`);
     }
@@ -69,17 +72,8 @@ function App() {
                 Тварини
               </button>
             </div>
-            {/* Оновлений список із обробником кліку */}
-            <ul className="clickable-list">
-              {Array.isArray(items) && items.map((item, i) => (
-                <li 
-                  key={i} 
-                  onClick={() => handleItemClick(item)}
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
+            {/* Використовуємо впроваджений сервіс рендерингу (Renderer Service) */}
+            {listRenderer.render(items, handleItemClick)}
           </div>
           <div className="panel">
             <h2>Зображення</h2>
