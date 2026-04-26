@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { SliderComponent } from "./components/SliderComponent";
-import { container } from "./container";
-import { IApiService } from "./services/IApiService";
 
 const API = "http://localhost:3000";
-const apiService = container.get<IApiService>(IApiService);
 
 function App() {
   const [items, setItems] = useState<string[]>([]);
@@ -15,19 +12,20 @@ function App() {
 
   const loadData = async (type: string) => {
     try {
-      // 1. Отримуємо текстові назви списку через DI
-      const dataItems = await apiService.getList(type);
-      setItems(dataItems || []);
+      // 1. Отримуємо текстові назви списку
+      const resList = await fetch(`${API}/api/list/${type}`);
+      const dataList = await resList.json();
+      setItems(dataList.items || []);
 
       // 2. Отримуємо імена файлів зображень
       const resImg = await fetch(`${API}/api/list/${type}/images`);
       const dataImg = await resImg.json();
       const files = dataImg.images || [];
-      setImageFiles(files);
+      setImageFiles(files); // Зберігаємо файли в стейт
 
       // 3. За замовчуванням показуємо першу картинку
       if (files.length > 0) {
-        setImageUrl(apiService.getImageUrl(type, files[0]));
+        setImageUrl(`${API}/images/${type}/${files[0]}`);
       } else {
         setImageUrl("");
       }
@@ -48,7 +46,7 @@ function App() {
     const matchingFile = imageFiles.find((file) => file.startsWith(itemName));
 
     if (matchingFile) {
-      setImageUrl(apiService.getImageUrl(listType, matchingFile));
+      setImageUrl(`${API}/images/${listType}/${matchingFile}`);
     } else {
       console.warn(`Картинку для ${itemName} не знайдено`);
     }
