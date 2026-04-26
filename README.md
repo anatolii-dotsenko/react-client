@@ -1,4 +1,4 @@
-# lab28. Client-Server App: MongoDB GridFS
+# lab29. Тестування з fixture-патерном
 
 ## Technologies Used
 * **Фреймворк:** React + Vite
