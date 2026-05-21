@@ -1,24 +1,47 @@
-import React from "react";
+import { useState } from "react";
+import { imageService } from "../services/imageService";
 
-export function UploadForm({ onUpload }: { onUpload: () => void }) {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+interface Props {
+  onUploadSuccess: () => void;
+}
+
+export const UploadForm = ({ onUploadSuccess }: Props) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    
-    await fetch("http://localhost:3000/api/images", {
-      method: "POST", 
-      body: form,
-    });
-    
-    // Очистити інпут після завантаження
-    e.currentTarget.reset();
-    onUpload();
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      await imageService.uploadImage(file);
+      setFile(null); // Очищуємо форму
+      onUploadSuccess(); // Кажемо батьківському компоненту оновити список
+    } catch (error: any) {
+      alert(error.response?.data?.error || "Помилка завантаження");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="upload-form">
-      <input type="file" name="image" accept="image/*" required />
-      <button type="submit">Завантажити у GridFS</button>
+    <form
+      onSubmit={handleUpload}
+      style={{ display: "flex", gap: "10px", alignItems: "center" }}
+    >
+      <input
+        type="file"
+        onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+        accept="image/*"
+      />
+      <button
+        type="submit"
+        disabled={!file || isUploading}
+        style={{ cursor: "pointer" }}
+      >
+        {isUploading ? "Завантажується..." : "Завантажити"}
+      </button>
     </form>
   );
-}
+};
