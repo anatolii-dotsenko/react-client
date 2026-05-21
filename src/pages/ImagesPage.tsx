@@ -6,23 +6,30 @@ import { SliderComponent } from "../components/SliderComponent";
 export const ImagesPage = () => {
   const [images, setImages] = useState<Image[]>([]);
 
-  const fetchImages = async () => {
-    try {
-      const data = await imageService.getImages();
-      setImages(data);
-    } catch (error) {
-      console.error("Помилка завантаження зображень:", error);
-    }
-  };
+  // ДОДАНО: Створюємо спеціальний тригер (лічильник) для оновлення сторінки
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
+  // Функція, яка просто збільшує лічильник, кажучи ефекту "завантаж дані ще раз"
+  const triggerRefresh = () => setRefreshCounter((prev) => prev + 1);
+
+  // Вся логіка завантаження тепер безпечно ізольована всередині useEffect
   useEffect(() => {
-    fetchImages();
-  }, []);
+    const loadImages = async () => {
+      try {
+        const data = await imageService.getImages();
+        setImages(data);
+      } catch (error) {
+        console.error("Помилка завантаження зображень:", error);
+      }
+    };
+
+    loadImages();
+  }, [refreshCounter]); // Ефект автоматично спрацює знову, якщо зміниться refreshCounter
 
   const handleDelete = async (id: string) => {
     try {
       await imageService.deleteImage(id);
-      fetchImages(); // Оновлюємо список після видалення
+      triggerRefresh(); // Замість виклику fetchImages, просто смикаємо тригер
     } catch (error) {
       console.error("Помилка видалення:", error);
     }
@@ -31,7 +38,9 @@ export const ImagesPage = () => {
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
       <h1>Персональна Галерея</h1>
-      <UploadForm onUploadSuccess={fetchImages} />
+
+      {/* Передаємо наш тригер у форму завантаження */}
+      <UploadForm onUploadSuccess={triggerRefresh} />
 
       <div
         style={{
@@ -64,7 +73,15 @@ export const ImagesPage = () => {
                   borderRadius: "4px",
                 }}
               />
-              <p style={{ fontSize: "14px", margin: "10px 0" }}>{img.name}</p>
+              <p
+                style={{
+                  fontSize: "14px",
+                  margin: "10px 0",
+                  wordBreak: "break-word",
+                }}
+              >
+                {img.name}
+              </p>
               <button
                 onClick={() => handleDelete(img.id)}
                 style={{
