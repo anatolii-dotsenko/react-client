@@ -1,16 +1,17 @@
-# Навчальна практика
-
+# Key Features
+- Account System: Registration and authorization using JWT tokens. Secure password hashing with bcrypt.
+- Personalized Galleries: Each user has access exclusively to their own uploaded images.
+- Storage Quotas: Automatic tracking of used space. Storage is limited to 500 MB per user.
+- File Storage: Utilizes MongoDB GridFS for streaming media files directly into the database, keeping the local disk clean.
+- Real-time Interaction: Synchronization of UI elements like the image slider between connected clients using Socket.io.
+- User Interface: Responsive React interface with support for protected routes and a dark and light theme toggle.
 
 ## Technologies Used
-* **Фреймворк:** React + Vite
-* **Мова:** TypeScript
-* **Dependency Injection:** `inversify` та `reflect-metadata` (дозволяє абстрагувати логіку запитів та рендерингу в окремі сервіси).
-* **Real-time зв'язок:** `socket.io-client` (для синхронізації слайдера між різними вкладками/клієнтами).
-* **Взаємодія з сервером:** Fetch API (отримання списків, статичних зображень та завантаження фото в MongoDB GridFS).
-**Backend (Node.js/Express):** `tsyringe` for DI. The app resolves services (`FileService`, `ContentService`) from a central DI container.
-https://github.com/anatolii-dotsenko/server
-- **Testing:** `jest` and `ts-jest` for unit testing the backend services with mocked file system (`fs`) dependencies.
-
+- React 18 and Vite for the library and bundler.
+- TypeScript for strict typing of interfaces and API responses.
+- React Router DOM for routing including protected routes.
+- Axios as the HTTP client with configured interceptors for automatic JWT transmission.
+- SCSS for styling the application.
 ## How to Run
 
 ### Start the Client
@@ -20,6 +21,7 @@ npm install
 npm run dev
 http://localhost:5173
 ```
-### Comments
-Усі стилі тепер компілюються через Sass, виглядають точно так само, але код став значно чистішим та легшим для масштабування завдяки змінним, міксинам (@mixin) та наслідуванню (@extend).
+### Project structure
+- The project is divided into two independent parts that communicate via a REST API. The backend folder contains the MVC architecture of controllers, services, Mongoose models, and GridFS logic. The frontend folder contains React components, the Context API for managing authorization state, and services for API access.
+
 ### Screenshots
